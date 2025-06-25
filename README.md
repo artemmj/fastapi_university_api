@@ -1,2 +1,2 @@
 # fastapi_university_api
-REST API для условного университета на FastAPI
+REST API условного университета на FastAPI
