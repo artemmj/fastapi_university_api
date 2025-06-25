@@ -6,6 +6,11 @@ from app.major.schemas import MajorSchemaAdd, MajorSchemaUpdate
 router = APIRouter(prefix='/majors', tags=['Факультеты'])
 
 
+@router.get("/", summary="Получить всех", response_model=list[StudentSchemaGet])
+async def get_all_students():
+    return await MajorDAO.get_all(**request_body.to_dict())
+
+
 @router.post("/", summary="Добавить новый")
 async def create_new_major(major: MajorSchemaAdd) -> dict:
     check = await MajorDAO.create(**major.dict())
