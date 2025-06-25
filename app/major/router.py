@@ -1,14 +1,14 @@
 from fastapi import APIRouter
 
 from app.major.dao import MajorDAO
-from app.major.schemas import MajorSchemaAdd, MajorSchemaUpdate
+from app.major.schemas import MajorSchemaGet, MajorSchemaAdd, MajorSchemaUpdate
 
 router = APIRouter(prefix='/majors', tags=['Факультеты'])
 
 
-@router.get("/", summary="Получить всех", response_model=list[StudentSchemaGet])
+@router.get("/", summary="Получить все", response_model=list[MajorSchemaGet])
 async def get_all_students():
-    return await MajorDAO.get_all(**request_body.to_dict())
+    return await MajorDAO.get_all()
 
 
 @router.post("/", summary="Добавить новый")
