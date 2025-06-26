@@ -27,7 +27,7 @@ def verify_password(plain_password: str, hashed_password: str) -> bool:
 
 
 async def authenticate_user(email: EmailStr, password: str):
-    user = await UsersDAO.get_one_or_none(email=email)
+    user = await UsersDAO.get_one_or_none({"email": email})
     if not user or verify_password(plain_password=password, hashed_password=user.password) is False:
         return None
     return user

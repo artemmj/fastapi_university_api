@@ -15,6 +15,14 @@ class UsersDAO:
             return result.scalar_one_or_none()
 
     @classmethod
+    async def get_by_id(cls, id: int):
+        async with async_session_maker() as session:
+            query = sqlalchemy_select(User).filter_by(id=id)
+            result = await session.execute(query)
+            return result.scalar_one_or_none()
+
+
+    @classmethod
     async def create(cls, **values):
         async with async_session_maker() as session:
             async with session.begin():
