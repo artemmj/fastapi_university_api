@@ -30,7 +30,7 @@ async def create_student(student: StudentSchemaCreate) -> dict:
 
 @router.delete("/{id}")
 async def dell_student_by_id(id: int) -> dict:
-    check = await StudentDAO.delete_student_(id=id)
+    check = await StudentDAO.delete(id=id)
     if check:
         return {"message": f"Студент с id={id} удален"}
     return {"message": "Ошибка при удалении студента"}

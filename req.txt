@@ -4,3 +4,6 @@ asyncpg
 sqlalchemy
 pydantic-settings
 greenlet
+python-jose
+passlib[bcrypt]
+bcrypt==4.0.1

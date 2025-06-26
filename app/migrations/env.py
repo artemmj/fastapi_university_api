@@ -11,6 +11,7 @@ from sqlalchemy.ext.asyncio import async_engine_from_config
 from app.database import DATABASE_URL, Base
 from app.student.models import Student
 from app.major.models import Major
+from app.user.models import User
 
 sys.path.insert(0, dirname(dirname(abspath(__file__))))
 # Это объект конфигурации Alembic (alembic.config.Config),
