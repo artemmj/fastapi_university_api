@@ -2,6 +2,7 @@ from sqlalchemy import (
     event,
     select as sqlalchemy_select,
     update as sqlalchemy_update,
+    delete as sqlalchemy_delete,
 )
 from sqlalchemy.orm import joinedload
 
@@ -50,6 +51,22 @@ class StudentDAO:
                 new_student_id = new_student.id
                 await session.commit()
                 return new_student_id
+    
+    @classmethod
+    async def delete(cls, id: int):
+        async with async_session_maker() as session:
+            async with session.begin():
+                query = sqlalchemy_select(cls.model).filter_by(id=id)
+                result = await session.execute(query)
+                deleted_student = result.scalar_one_or_none()
+
+                if not deleted_student:
+                    return None
+
+                # Удаляем студента
+                await session.execute(sqlalchemy_delete(cls.model).filter_by(id=id))
+                await session.commit()
+                return id
 
 
 @event.listens_for(Student, 'after_insert')
@@ -59,4 +76,14 @@ def upd_major_after_insert(mapper, connection, target):
         sqlalchemy_update(Major)
         .where(Major.id == major_id)
         .values(count_students=Major.count_students + 1)
+    )
+
+
+@event.listens_for(Student, 'after_delete')
+def upd_major_after_insert(mapper, connection, target):
+    major_id = target.major_id
+    connection.execute(
+        sqlalchemy_update(Major)
+        .where(Major.id == major_id)
+        .values(count_students=Major.count_students - 1)
     )
