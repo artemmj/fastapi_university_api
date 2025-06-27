@@ -15,6 +15,7 @@ class Student(Base):
     enrollment_year: Mapped[int]
     course: Mapped[int]
     special_notes: Mapped[str_null_true]
+    photo: Mapped[str] = mapped_column(Text, nullable=True)
     major_id: Mapped[int] = mapped_column(ForeignKey("majors.id"), nullable=False)
 
     major: Mapped["Major"] = relationship("Major", back_populates="students")

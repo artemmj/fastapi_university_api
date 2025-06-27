@@ -4,7 +4,7 @@ from fastapi import APIRouter, Depends, HTTPException, Response, status
 from app.config import create_access_token
 from app.user.auth import get_password_hash, authenticate_user
 from app.user.dao import UsersDAO
-from app.user.dependencies import get_current_user
+from app.user.dependencies import get_current_user, get_current_admin_user
 from app.user.schemas import UserSchemaRegister, UserSchemaAuth
 from app.user.models import User
 
@@ -43,10 +43,15 @@ async def auth_user(response: Response, user_data: UserSchemaAuth):
 
 @router.post("/logout", summary="Разлогиниться")
 async def logout_user(response: Response):
-    response.delete_cookie(key="users_access_token")
+    response.delete_cookie(key="access_token")
     return {'message': 'Пользователь успешно вышел из системы'}
 
 
 @router.get("/me", summary="Инфо о юзере")
 async def get_me(user_data: User = Depends(get_current_user)):
     return user_data
+
+
+@router.get("/all_users/")
+async def get_all_users(user_data: User = Depends(get_current_admin_user)):
+    return await UsersDAO.get_all()

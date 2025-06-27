@@ -63,7 +63,6 @@ class StudentDAO:
                 if not deleted_student:
                     return None
 
-                # Удаляем студента
                 await session.execute(sqlalchemy_delete(cls.model).filter_by(id=id))
                 await session.commit()
                 return id
